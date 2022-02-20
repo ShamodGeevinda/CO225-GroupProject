@@ -44,13 +44,33 @@
             android:text="Add Profile Picture"
             android:textSize="24sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/setting_profile_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/profile" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="186dp"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/setting_profile_image"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:src="@drawable/profile" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Space>
+
+            <Button
+                android:id="@+id/change_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="Change" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnsave"
@@ -58,6 +78,15 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="Save" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="Test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 
 
