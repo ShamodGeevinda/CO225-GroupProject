@@ -34,11 +34,26 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:hint="Enter Your Name"
+            android:layout_marginBottom="40dp"
             android:textColorHint="#3F9DEB"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Add Profile Picture"
+            android:textSize="24sp" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/setting_profile_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/profile" />
 
         <Button
+            android:id="@+id/btnsave"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
