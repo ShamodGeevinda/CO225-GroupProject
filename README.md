@@ -1,1 +1,1 @@
-# CO225-GroupProject - BLuetooth Chat Application
+# CO225-GroupProject - Bluetooth Chat Application
