@@ -6,4 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".StartView">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+
+
+        tools:ignore="MissingConstraints">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:gravity="right"
+            android:text="Bluetooth"
+            android:textOff="off"
+            android:textOn="on"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+
+            >
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="50dp"
+                android:text="Pairing mode"
+
+
+                ></Button>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Space>
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="50dp"
+                android:text="Start chat"
+
+                ></Button>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
