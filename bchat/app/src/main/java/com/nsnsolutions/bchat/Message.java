@@ -1,18 +1,20 @@
 package com.nsnsolutions.bchat;
 
-
 import android.text.Editable;
 
+/**
+ * Message is a class to use to make message object
+ */
+
 public class Message {
-    private String message;
-    //private String time;
-    private String user;
-    private String mac;
+
+    private String message; //string use to store the content of the message
+    private String user;    //variable use to keep track whether message was sent(S) or Received(R)
+    private String mac;     //variable use to keep the mac address of the receiver
 
     //constructors
     public Message(String message, String user,String mac) {
         this.message = message;
-        //this.time = time;
         this.user = user;
         this.mac = mac.replaceAll("[^a-zA-Z0-9]", "");;
     }
@@ -23,7 +25,7 @@ public class Message {
 
 
 
-    //toString
+    //toString Method
     @Override
     public String toString() {
         return "Message{" +
@@ -41,14 +43,6 @@ public class Message {
     public void setMessage(String message) {
         this.message = message;
     }
-
-    /*public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }*/
 
     public String getUser() {
         return user;

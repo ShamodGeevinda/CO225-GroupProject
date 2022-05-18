@@ -24,6 +24,9 @@ import java.util.List;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+/**
+ * ChatView is a class that holds all the funtion of the chat user interface
+ */
 public class ChatView extends AppCompatActivity  {
 
     TextView chatName;
@@ -31,18 +34,15 @@ public class ChatView extends AppCompatActivity  {
     ImageView connectBt;
     ImageView send_bt, imageBack;
     EditText etSend;
-    StringBuilder messages;
+    ListView chat;
+
     ArrayAdapter messageArrayAdapter;
     List<String> message = new ArrayList<String >();
-    ListView chat;
-    ChatDatabase chatDatabase = new ChatDatabase(ChatView.this);
     List<Message> messageList = new ArrayList<>();
+    ChatDatabase chatDatabase = new ChatDatabase(ChatView.this);
 
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
-    // BluetoothAdapter mAdapter;
-    //    private BluetoothAdapter BA;
-    //    private Set<BluetoothDevice> PairedDevices;
     BluetoothConnection mBluetoothConnection;
 
     @Override
@@ -53,7 +53,6 @@ public class ChatView extends AppCompatActivity  {
         chatName = findViewById(R.id.chatname);
         connectBt = findViewById(R.id.connect_bt);
         send_bt = findViewById(R.id.send_bt);
-        //holder.imageView = (ImageButton) convertView.findViewById(R.id.iv_thumb);
         etSend = findViewById(R.id.data);
         chat = findViewById(R.id.incommingMessage);
         imageBack = findViewById(R.id.imageBack);
@@ -61,26 +60,17 @@ public class ChatView extends AppCompatActivity  {
         // retrieving data to add chat details in the top(header)
         String chatername = getIntent().getStringExtra("chater");
         device = getIntent().getExtras().getParcelable("deviceDetail");
-
         chatName.setText(chatername);
-        messageList = chatDatabase.getAllChats(device.getAddress());
-        //Toast.makeText(this, messageList.toString(), Toast.LENGTH_SHORT).show();
-        //try {
-            //chatDatabase = new ChatDatabase(ChatView.this);
 
-            //messageArrayAdapter = new ArrayAdapter<Message>(ChatView.this, android.R.layout.simple_list_item_1, messageList);
-            for(Message msg: messageList){
-                message.add("You: "+msg.getMessage());
+        //to update the list view
+        messageList = chatDatabase.getAllChats(device.getAddress()); //getting all the message list relevant chat
+        message.clear(); //clear the message array
+        for(Message msg: messageList){
+                message.add(msg.getMessage());
            }
-            //Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show();
-            messageArrayAdapter = new ArrayAdapter<String>(ChatView.this, android.R.layout.simple_list_item_1, message);
-            chat.setAdapter(messageArrayAdapter);
-        //}catch(NullPointerException n){
+        messageArrayAdapter = new ArrayAdapter<String>(ChatView.this, android.R.layout.simple_list_item_1, message);
+        chat.setAdapter(messageArrayAdapter);
 
-        //}
-
-        //incommingMessages = (TextView)findViewById(R.id.incommingMessage) ;
-        //messages = new StringBuilder();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incommingMessage"));
 
         // to catch bond state changes
@@ -89,74 +79,66 @@ public class ChatView extends AppCompatActivity  {
 
 
 
-        connectBt.setOnClickListener(new View.OnClickListener() {
+        connectBt.setOnClickListener(new View.OnClickListener() { //event listener to connectButton
             @Override
             public void onClick(View view) {
                 Toast.makeText(ChatView.this, "Connecting to the user", Toast.LENGTH_SHORT).show();
-
-                //BluetoothDevice newD = (BluetoothDevice) device;
                 device.createBond();
                 mBTDevice = device;
                 mBluetoothConnection = new BluetoothConnection(ChatView.this);
                 Log.d("Main Activity",device.getName() + device.getAddress() + device.getBondState());
 
                 startConnection();
-
-
             }
         });
 
 
-        send_bt.setOnClickListener(new View.OnClickListener() {
+        send_bt.setOnClickListener(new View.OnClickListener() { //Event listener to the send button
             @Override
             public void onClick(View view) {
                 try {
                     byte[] bytes = etSend.getText().toString().getBytes(Charset.defaultCharset());
                     Message message1 = new Message("You : "+ etSend.getText().toString(), "S", device.getAddress());
                     mBluetoothConnection.write(bytes);
-                    chatDatabase.addChat(message1);
-                    messageList = chatDatabase.getAllChats(device.getAddress());
+
+                    chatDatabase.addChat(message1);//update the database
+                    messageList = chatDatabase.getAllChats(device.getAddress()); //retrieve data from the database
                     message.clear();
                     for(Message msg: messageList){
                         message.add(msg.getMessage());
                     }
                     messageArrayAdapter.notifyDataSetChanged();
-                    //Toast.makeText(ChatView.this, device.getAddress(), Toast.LENGTH_SHORT).show();
-                    //messageArrayAdapter = new ArrayAdapter<Message>(ChatView.this, android.R.layout.simple_list_item_1, chatDatabase.getAllChats(device.getAddress()));
-                    //chat.setAdapter(messageArrayAdapter);
 
-                    etSend.setText("");
+                    etSend.setText(""); //setting the text box empty after successful send
                 }catch (Exception e){
                     Toast.makeText(ChatView.this, "Cant connect to the user!\nTry Again!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
-        imageBack.setOnClickListener(new View.OnClickListener() {
+        imageBack.setOnClickListener(new View.OnClickListener() { //event listner to the back button
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                startActivity(intent); //go to the main activity interface
             }
         });
     }
 
-    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    BroadcastReceiver mReceiver = new BroadcastReceiver() { //to receive message
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             Message message1 = new Message(device.getName()+" : "+text , "R", device.getAddress());
-            chatDatabase.addChat(message1);
+            chatDatabase.addChat(message1); //add message to the database
             messageList = chatDatabase.getAllChats(device.getAddress());
-            message.clear();
+            message.clear(); // clear the message array
             for(Message msg: messageList){
                 message.add(msg.getMessage());
             }
-            messageArrayAdapter.notifyDataSetChanged();
-            //messages.append(text+ "\n");
-            //incommingMessages.setText(messages);
+            messageArrayAdapter.notifyDataSetChanged(); //update the list view
+
         }
     };
 
@@ -195,8 +177,6 @@ public class ChatView extends AppCompatActivity  {
      * starting chat service method
      */
     public void startBTConnection(BluetoothDevice device, UUID uuid){
-        //Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-
         mBluetoothConnection.startClient(device,uuid);
     }
 

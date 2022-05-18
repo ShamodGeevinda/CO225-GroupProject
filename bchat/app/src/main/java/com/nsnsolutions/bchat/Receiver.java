@@ -1,7 +1,13 @@
 package com.nsnsolutions.bchat;
 
+
+/**
+ *This is a class created to make a receiver object
+ */
+
 public class Receiver {
 
+    //defining attributes
     private String mac;
     private String name;
 
@@ -14,7 +20,7 @@ public class Receiver {
     public Receiver() {
     }
 
-
+    //toString method
     @Override
     public String toString() {
         return "Receiver{" +

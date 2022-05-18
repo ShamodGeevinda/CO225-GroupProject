@@ -18,7 +18,9 @@ import java.nio.charset.Charset;
 import java.util.UUID;
 
 
-
+/**
+ * BluetoothConnection is a class that has all the functionalities of the bluetooth API
+ */
 public class BluetoothConnection {
     private static final String TAG = "BluetoothConnectionServ";
 
@@ -31,8 +33,6 @@ public class BluetoothConnection {
 
     Context mContext;
     ChatDatabase chatDatabase = new ChatDatabase(null);
-    //List<Message> messageList = new ArrayList<>();
-    //List<String> message = new ArrayList<String >();
 
     private AcceptThread mInsecureAcceptThread;
 
@@ -263,13 +263,6 @@ public class BluetoothConnection {
                 try {
                     bytes = mmInStream.read(buffer);
                     incommingMessage = new String(buffer, 0, bytes);
-                   //Toast.makeText(mContext, incommingMessage.toString(), Toast.LENGTH_SHORT).show();
-                    /*try {
-                        Message message1 = new Message(incommingMessage, "R", mmDevice.getAddress());
-                        chatDatabase.addChat(message1);
-                    }catch (Exception e){
-                        Toast.makeText(mContext, "Buduammo", Toast.LENGTH_SHORT).show();
-                    }*/
                     Log.d(TAG, "InputStream: " + incommingMessage);
                     Intent incommingMessageIntent = new Intent("incommingMessage");
                     incommingMessageIntent.putExtra("theMessage", incommingMessage);
@@ -279,12 +272,6 @@ public class BluetoothConnection {
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage() );
                     break;
                 }
-                /*try {
-                    Message message1 = new Message(incommingMessage, "R", "mmDevice.getAddress()");
-                    chatDatabase.addChat(message1);
-                }catch (Exception e){
-                    Toast.makeText(mContext, "Buduammo", Toast.LENGTH_SHORT).show();
-                }*/
             }
         }
 

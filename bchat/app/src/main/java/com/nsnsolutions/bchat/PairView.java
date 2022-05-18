@@ -18,6 +18,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+/**
+ * PairView is a class that has the functionalities of the add new user interface
+ */
 public class PairView extends AppCompatActivity {
 
     BluetoothAdapter bluetoothAdapter;
@@ -25,7 +28,7 @@ public class PairView extends AppCompatActivity {
     ArrayList arrayList = new ArrayList();
 
 
-     ArrayList<BluetoothDevice> availableDevices = new ArrayList<BluetoothDevice>();
+    ArrayList<BluetoothDevice> availableDevices = new ArrayList<BluetoothDevice>();
     ListView pairList;
     Button pair_bt;
 
@@ -37,36 +40,22 @@ public class PairView extends AppCompatActivity {
         pairList = findViewById(R.id.pairlist_view);
         pair_bt = findViewById(R.id.pairSearch_bt);
 
-
         arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, arrayList);
         pairList.setAdapter(arrayAdapter);
 
-        pairList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pairList.setOnItemClickListener(new AdapterView.OnItemClickListener() { //event listener to the discover buttons
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 BluetoothDevice blt = availableDevices.get(i);
-
                 blt.createBond();
-
                 Log.d("pairing",blt.getName() + blt.getAddress() + blt.getBondState());
-
-
-
             }
-
         });
-
-
-
-
     }
 
 
     public void discoverDevices(View v) {
         bluetoothAdapter.startDiscovery();
-
-
     }
 
 
@@ -77,14 +66,11 @@ public class PairView extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-
-
                 if(arrayList.contains(device.getName())){}
                 else {
                     availableDevices.add(device);
                     arrayList.add(device.getName());
                     arrayAdapter.notifyDataSetChanged();
-
                 }
             }
         }
@@ -96,6 +82,4 @@ public class PairView extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(broadcastReceiver, intentFilter);
     }
-
-
 }

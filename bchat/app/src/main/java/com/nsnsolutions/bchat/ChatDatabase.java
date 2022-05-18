@@ -11,12 +11,14 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ChatDatabase is a class that has the database of the chat and its functionalities
+ */
 public class ChatDatabase extends SQLiteOpenHelper {
 
     public static final String COL_MAC = "MAC";
     public static final String CHATS = "CHATS";
     public static final String MESSAGE = "MESSAGE";
-    //public static final String STIME = "STIME";
     public static final String USER = "USER";
     public static final String MSG_COUNT = "MSG_COUNT";
 
@@ -24,13 +26,9 @@ public class ChatDatabase extends SQLiteOpenHelper {
         super(context, "chat.db", null , 1);
     }
 
-
-
-
     //when calling the method for the first time
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //String createChatTable = "CREATE TABLE " + CHATS + " (" + MSG_COUNT+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+ COL_MAC + " VARCHAR(100), " + MESSAGE +" VARCHAR(1000), "+ STIME +" VARCHAR(100), "+USER +" VARCHAR(1))";
         String createChatTable = "CREATE TABLE " + CHATS + " (" + MSG_COUNT+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+ COL_MAC + " VARCHAR(100), " + MESSAGE +" VARCHAR(1000), "+USER +" VARCHAR(1))";
         sqLiteDatabase.execSQL(createChatTable);
 
@@ -42,37 +40,40 @@ public class ChatDatabase extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * A funtion to add a message to the database
+     */
     public boolean addChat(Message message){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues cVal = new ContentValues();
         cVal.put(COL_MAC, message.getMac().replaceAll("[^a-zA-Z0-9]", ""));
         cVal.put(MESSAGE, message.getMessage());
-        //cVal.put(STIME, message.getTime());
         cVal.put(USER, message.getUser());
-
         long insert = sqLiteDatabase.insert(CHATS, null, cVal);
         return insert != -1;
     }
 
 
+    /**
+     * A funtion to return all the chats relevant to a one chat
+     * @param macAddress
+     * @return
+     */
     public List<Message> getAllChats(String macAddress){
         List<Message> allChats = new ArrayList<>();
 
         //getting data from the database
+        String usersQuery =  "SELECT * FROM "+ CHATS; //sql query
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase(); //executing the query
 
-        String usersQuery =  "SELECT * FROM "+ CHATS;//+" WHERE "+COL_MAC+" = "+macAddress.replaceAll("[^a-zA-Z0-9]", "");
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-
-        Cursor cursor = sqLiteDatabase.rawQuery(usersQuery, null);
-
+        Cursor cursor = sqLiteDatabase.rawQuery(usersQuery, null); //cursor object to iterate to the query
         if(cursor.moveToFirst()){
-            do{
+            do{//retrieving the data
                 String mac = cursor.getString(1);
                 String message = cursor.getString(2);
-                //String time = cursor.getString(3);
                 String user = cursor.getString(3);
 
-                if(mac.equals(macAddress.replaceAll("[^a-zA-Z0-9]", "")) ){
+                if(mac.equals(macAddress.replaceAll("[^a-zA-Z0-9]", "")) ){ //if the mac addresses are same
                     Message messages = new Message(message, mac, user);
                     allChats.add(messages);
                 }
@@ -83,8 +84,7 @@ public class ChatDatabase extends SQLiteOpenHelper {
         //closing cursor and the database
         cursor.close();
         sqLiteDatabase.close();
-        //returning the array
-        return allChats;
+        return allChats;//returning the array
     }
 
 
